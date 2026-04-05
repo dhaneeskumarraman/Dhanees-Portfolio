@@ -144,18 +144,16 @@
 
         .highlight { color: var(--primary); font-weight: 600; }
 
-        .contact-form {
+        .contact-form-container {
             max-width: 600px; margin: 0 auto;
             display: flex; flex-direction: column; gap: 15px;
         }
-        .contact-form input, .contact-form textarea {
+        .contact-form-container input, .contact-form-container textarea {
             padding: 15px; border-radius: 8px; border: 1px solid var(--grey);
-            background: var(--light); color: white; font-size: 1rem;
+            background: var(--light); color: white; font-size: 1rem; width: 100%;
+            margin-bottom: 10px;
         }
-        .contact-form button {
-            background: var(--primary); color: white; border: none;
-            padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer;
-        }
+        .status-msg { margin-top: 15px; font-weight: bold; }
 
         footer { text-align: center; padding: 40px; background: #070b14; color: var(--grey); border-top: 1px solid rgba(255,255,255,0.05); }
 
@@ -254,8 +252,8 @@
     function Roadmap() {
         const skills = [
             { icon: "fa-brush", title: "UI/UX Design", desc: "Figma, Canva, Photoshop, Wireframing, Prototyping" },
-            { icon: "fa-code", title: "Frontend Dev", desc: "HTML5, CSS3, JavaScript (ES6+), React.js" },
-            { icon: "fa-server", title: "Backend & OS", desc: "Node.js, Firebase, Windows, Linux" },
+            { icon: "fa-code", title: "Frontend Dev", desc: "HTML5, CSS3, JavaScript, React.js" },
+            { icon: "fa-server", title: "Backend & OS", desc: " Firebase, Windows, Linux" },
             { icon: "fa-vial", title: "Testing & VC", desc: "User Research, Design Thinking, GitHub" }
         ];
         return (
@@ -357,17 +355,67 @@
     }
 
     function Contact() {
+        const [status, setStatus] = useState("");
+        const [loading, setLoading] = useState(false);
+
+        const handleSubmit = async (e) => {
+            e.preventDefault();
+            setLoading(true);
+            setStatus("Casting your spell...");
+
+            // IMPORTANT: PASTE YOUR GOOGLE SCRIPT WEB APP URL HERE (Ends in /exec)
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxKIFiNVYVdsLtTllbn1rv_7pfW48tpsDZt7c8WsZIuR704gZW7itmsY4rrPKW61m0d9A/exec";
+
+            const formData = {
+                name: e.target.name.value,
+                email: e.target.email.value,
+                message: e.target.message.value
+            };
+
+            try {
+                // Using 'no-cors' helps avoid redirect issues with Google Scripts
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData),
+                });
+                
+                setStatus("Message Sent Successfully! ✨");
+                e.target.reset();
+            } catch (error) {
+                setStatus("Magic failed... Please try again later.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
         return (
             <section id="contact">
                 <h2 data-aos="fade-up">Get In Touch</h2>
-                <div className="contact-form" data-aos="fade-up">
-                    <input type="text" placeholder="Name" required />
-                    <input type="email" placeholder="Email" required />
-                    <textarea placeholder="Tell me about your project..." rows="5" required></textarea>
-                    <button type="submit">Send Magic Message</button>
-                    <div style={{marginTop: '20px', color: 'var(--grey)'}}>
-                        <p>Email: dhaneeskumar888@gmail.com</p>
-                        <p>
+                <div className="contact-form-container" data-aos="fade-up">
+                    <form onSubmit={handleSubmit}>
+                        <input type="text" name="name" placeholder="Name" required />
+                        <input type="email" name="email" placeholder="Email" required />
+                        <textarea name="message" placeholder="Tell me about your project..." rows="5" required></textarea>
+                        
+                        <button type="submit" className="btn btn-primary" style={{width: '100%'}} disabled={loading}>
+                            {loading ? "Sending..." : "Send Magic Message"}
+                        </button>
+                    </form>
+
+                    {status && (
+                        <div className="status-msg" style={{
+                            textAlign: 'center', 
+                            color: status.includes('Successfully') ? 'var(--primary)' : '#ef4444'
+                        }}>
+                            {status}
+                        </div>
+                    )}
+
+                    <div style={{marginTop: '30px', color: 'var(--grey)', textAlign: 'center'}}>
+                        <p>Email: <span className="highlight">dhaneeskumar888@gmail.com</span></p>
+                        <p style={{marginTop: '10px'}}>
                             <a href="https://linkedin.com/in/dhaneeskumar" target="_blank" style={{color: 'var(--primary)', textDecoration: 'none'}}>
                                 <i className="fab fa-linkedin"></i> LinkedIn Profile
                             </a>
