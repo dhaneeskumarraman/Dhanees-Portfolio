@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dhaneeskumar R | Magical Portfolio</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #0ea5e9;
+            --dark: #0f172a;
+            --light: #1e293b;
+            --white: #fff;
+            --grey: #94a3b8;
+            --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            font-family: var(--font);
+            background: var(--dark);
+            color: var(--white);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            cursor: none;
+        }
+
+        .sparkle-cursor {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.8;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            z-index: 10000;
+            box-shadow: 0 0 15px var(--primary), 0 0 30px var(--primary);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 6%;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-logo {
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
+        }
+
+        .nav-links a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 500;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        .btn {
+            padding: 10px 22px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary { background: var(--primary); color: white; border: none; }
+        .btn-outline { border: 2px solid var(--primary); color: var(--primary); }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(14, 165, 233, 0.3); }
+
+        .hero {
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            padding: 0 6%;
+        }
+
+        .hero h1 { font-size: 4rem; margin: 0; }
+        .hero p { font-size: 1.5rem; color: var(--grey); margin: 20px 0; min-height: 1.6em; }
+
+        section { padding: 100px 10%; }
+        h2 { text-align: center; font-size: 2.8rem; margin-bottom: 50px; position: relative; }
+        h2::after {
+            content: ''; width: 70px; height: 4px; background: var(--primary);
+            position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--light);
+            padding: 30px;
+            border-radius: 15px;
+            transition: 0.4s ease;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 15px rgba(14, 165, 233, 0.2);
+        }
+
+        .card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; display: block; }
+        .card h3 { margin-top: 0; color: var(--primary); }
+        .card p { color: var(--grey); flex-grow: 1; }
+        .card ul { padding-left: 18px; color: var(--grey); text-align: left; }
+        .card li { margin-bottom: 8px; }
+
+        .highlight { color: var(--primary); font-weight: 600; }
+
+        .contact-form {
+            max-width: 600px; margin: 0 auto;
+            display: flex; flex-direction: column; gap: 15px;
+        }
+        .contact-form input, .contact-form textarea {
+            padding: 15px; border-radius: 8px; border: 1px solid var(--grey);
+            background: var(--light); color: white; font-size: 1rem;
+        }
+        .contact-form button {
+            background: var(--primary); color: white; border: none;
+            padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer;
+        }
+
+        footer { text-align: center; padding: 40px; background: #070b14; color: var(--grey); border-top: 1px solid rgba(255,255,255,0.05); }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-links { display: none; }
+            section { padding: 60px 5%; }
+            body { cursor: auto; }
+            .sparkle-cursor { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="root"></div>
+<div class="sparkle-cursor" id="cursor"></div>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function Navbar() {
+        return (
+            <nav className="navbar">
+                <div className="nav-logo">Dhaneeskumar R</div>
+                <div className="nav-links">
+                    <a href="#home">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#roadmap">Roadmap</a>
+                    <a href="#experience">Experience</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#contact">Contact</a>
+                    <a 
+                        href="https://drive.google.com/file/d/1H5G3RpLGkNlYbpHn5YX11G2mdQ6Spt3s/view?usp=drive_link" 
+                        className="btn btn-primary"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{marginLeft: '20px'}}
+                    >
+                        Resume
+                    </a>
+                </div>
+            </nav>
+        );
+    }
+
+    function Hero() {
+        const roles = ["UI/UX Designer", "Frontend Developer", "Creative Thinker"];
+        const [idx, setIdx] = useState(0);
+        const [text, setText] = useState("");
+
+        useEffect(() => {
+            let i = 0;
+            const typing = setInterval(() => {
+                setText(roles[idx].slice(0, i));
+                i++;
+                if (i > roles[idx].length) {
+                    clearInterval(typing);
+                    setTimeout(() => setIdx((prev) => (prev + 1) % roles.length), 2000);
+                }
+            }, 100);
+            return () => clearInterval(typing);
+        }, [idx]);
+
+        return (
+            <section className="hero" id="home">
+                <h1 data-aos="zoom-in">Hi, I'm <span style={{color: 'var(--primary)'}}>Dhaneeskumar</span></h1>
+                <p>{text}<span style={{animation: 'blink 1s infinite'}}>|</span></p>
+                <div data-aos="fade-up" data-aos-delay="500">
+                    <a href="#projects" className="btn btn-primary" style={{marginRight: '10px'}}>View My Work</a>
+                    <a href="#contact" className="btn btn-outline">Let's Talk</a>
+                </div>
+            </section>
+        );
+    }
+
+    function About() {
+        return (
+            <section id="about" data-aos="fade-up">
+                <h2>About Me</h2>
+                <div style={{maxWidth: '850px', margin: '0 auto', textAlign: 'center', fontSize: '1.2rem', lineHeight: '1.8'}}>
+                    <p>
+                        I’m <span className="highlight">Dhaneeskumar R</span>, a B.E. Computer Science graduate from <span className="highlight">Government College of Engineering, Salem</span> (2020–2024).
+                    </p>
+                    <p>
+                        As an enthusiastic fresher, I am eager to explore new technologies and learn from every opportunity. I thrive in <span className="highlight">team collaborations</span> and enjoy building creative digital experiences that are both functional and magical.
+                    </p>
+                </div>
+            </section>
+        );
+    }
+
+    function Roadmap() {
+        const skills = [
+            { icon: "fa-brush", title: "UI/UX Design", desc: "Figma, Canva, Photoshop, Wireframing, Prototyping" },
+            { icon: "fa-code", title: "Frontend Dev", desc: "HTML5, CSS3, JavaScript (ES6+), React.js" },
+            { icon: "fa-server", title: "Backend & OS", desc: "Node.js, Firebase, Windows, Linux" },
+            { icon: "fa-vial", title: "Testing & VC", desc: "User Research, Design Thinking, GitHub" }
+        ];
+        return (
+            <section id="roadmap" style={{background: '#0a101e'}}>
+                <h2 data-aos="fade-down">My Roadmap</h2>
+                <div className="grid">
+                    {skills.map((s, i) => (
+                        <div className="card" key={i} data-aos="flip-left" data-aos-delay={i * 100}>
+                            <i className={`fas ${s.icon}`}></i>
+                            <h3>{s.title}</h3>
+                            <p>{s.desc}</p>
+                        </div>
+                    ))}
+                </div>
+            </section>
+        );
+    }
+
+    function Experience() {
+        return (
+            <section id="experience">
+                <h2 data-aos="fade-up">Professional Journey</h2>
+                <div className="grid">
+                    <div className="card" data-aos="fade-right">
+                        <span>2024</span>
+                        <h3>UI/UX Intern</h3>
+                        <p className="highlight">ICE Erode</p>
+                        <ul>
+                            <li>Designed web and mobile interfaces in a collaborative team.</li>
+                            <li>Created wireframes and interactive prototypes using Figma.</li>
+                            <li>Applied Design Thinking to solve accessibility challenges.</li>
+                        </ul>
+                    </div>
+                    <div className="card" data-aos="fade-left">
+                        <span>Creative Space</span>
+                        <h3>Designer</h3>
+                        <p className="highlight">Studio Pamaplests</p>
+                        <ul>
+                            <li>Created interactive and flexible visual designs for studio projects.</li>
+                            <li>Focus on modern aesthetics and user-centric layouts.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    function Projects() {
+        return (
+            <section id="projects" style={{background: '#0a101e'}}>
+                <h2 data-aos="fade-up">Featured Projects</h2>
+                <div className="grid">
+                    <div className="card" style={{gridColumn: '1 / -1', maxWidth: '800px', margin: '0 auto'}} data-aos="zoom-in">
+                        <i className="fas fa-robot"></i>
+                        <h3>Social Media App with AI Chatbot</h3>
+                        <p>A full-stack application featuring a responsive social interface and an intelligent GPT-powered chatbot for real-time user assistance.</p>
+                        <p><span className="highlight">Tech Stack:</span> React.js, Node.js, Firebase, OpenAI API</p>
+                        <a href="https://github.com/dhaneeskumarraman" target="_blank" className="btn btn-outline" style={{marginTop: '15px', alignSelf: 'flex-start'}}>View on GitHub →</a>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    function Certs() {
+        return (
+            <section id="certs">
+                <h2 data-aos="fade-up">Certifications</h2>
+                <div className="grid">
+                    <div className="card" data-aos="fade-up">
+                        <i className="fas fa-certificate"></i>
+                        <h3>Java Certification</h3>
+                        <p>Great Learning - Proficiency in modern Java development standards.</p>
+                        <a 
+                            href="https://www.mygreatlearning.com/certificate/SHDORQFM" 
+                            target="_blank" 
+                            className="btn btn-outline" 
+                            style={{marginTop: '15px', fontSize: '0.8rem', alignSelf: 'flex-start'}}
+                        >
+                            Verify Certificate →
+                        </a>
+                    </div>
+                    <div className="card" data-aos="fade-up" data-aos-delay="200">
+                        <i className="fas fa-users"></i>
+                        <h3>Young Professionals</h3>
+                        <p>TCS iON - Behavioral, Communication, and Soft Skills training.</p>
+                        <a 
+                            href="https://drive.google.com/file/d/1eiQRYGsD-1SQh6YsStoZmx1UCClLR4Af/view?usp=drive_link" 
+                            target="_blank" 
+                            className="btn btn-outline" 
+                            style={{marginTop: '15px', fontSize: '0.8rem', alignSelf: 'flex-start'}}
+                        >
+                            Verify Certificate →
+                        </a>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    function Contact() {
+        return (
+            <section id="contact">
+                <h2 data-aos="fade-up">Get In Touch</h2>
+                <div className="contact-form" data-aos="fade-up">
+                    <input type="text" placeholder="Name" required />
+                    <input type="email" placeholder="Email" required />
+                    <textarea placeholder="Tell me about your project..." rows="5" required></textarea>
+                    <button type="submit">Send Magic Message</button>
+                    <div style={{marginTop: '20px', color: 'var(--grey)'}}>
+                        <p>Email: dhaneeskumar888@gmail.com</p>
+                        <p>
+                            <a href="https://linkedin.com/in/dhaneeskumar" target="_blank" style={{color: 'var(--primary)', textDecoration: 'none'}}>
+                                <i className="fab fa-linkedin"></i> LinkedIn Profile
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
+    function App() {
+        useEffect(() => {
+            AOS.init({ duration: 1000, once: true });
+
+            const cursor = document.getElementById("cursor");
+            const moveCursor = (e) => {
+                cursor.style.left = e.clientX + "px";
+                cursor.style.top = e.clientY + "px";
+            };
+            window.addEventListener("mousemove", moveCursor);
+            return () => window.removeEventListener("mousemove", moveCursor);
+        }, []);
+
+        return (
+            <div>
+                <Navbar />
+                <Hero />
+                <About />
+                <Roadmap />
+                <Experience />
+                <Projects />
+                <Certs />
+                <Contact />
+                <footer>
+                    <p>© 2026 Dhaneeskumar R | Designed with ✨ and React</p>
+                </footer>
+            </div>
+        );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
+</script>
+
+</body>
+</html>
