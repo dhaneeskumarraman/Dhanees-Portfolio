@@ -39,7 +39,7 @@ function Contact() {
         <section id="contact">
             <h2 data-aos="fade-up">Get In Touch</h2>
             <div className="contact-form" data-aos="fade-up">
-                <form onSubmit={handleSubmit} className="contact-form" style={{padding: 0}}>
+                <a onSubmit={handleSubmit} className="contact-form" style={{padding: 0}}>
                     <input type="text" name="name" placeholder="Name" required />
                     <input type="email" name="email" placeholder="Email" required />
                     <textarea name="message" placeholder="Tell me about your project..." rows="5" required></textarea>
@@ -47,7 +47,7 @@ function Contact() {
                     <button type="submit" disabled={loading}>
                         {loading ? "Sending..." : "Send Magic Message"}
                     </button>
-                </form>
+                </a>
 
                 {status && (
                     <div style={{
